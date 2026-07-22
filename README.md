@@ -1,10 +1,11 @@
-# Ex-4 Rail-Fence-Program
+# Ex-4 Rail-Fence-Program - IMPLEMENTATION OF RAIL FENCE – ROW & COLUMN TRANSFORMATION TECHNIQUE
 
-# IMPLEMENTATION OF RAIL FENCE – ROW & COLUMN TRANSFORMATION TECHNIQUE
+## NAME : HEMANTH KUMAR S
+## REG NO. : 212224040115
+## DATE : 24/07/26
 
 # AIM:
-
-# To write a C program to implement the rail fence transposition technique.
+To write a C program to implement the rail fence transposition technique.
 
 # DESCRIPTION:
 
@@ -19,7 +20,104 @@ STEP-4: Arrange the characters of the keyword in sorted order and the correspond
 STEP-5: Read the characters row wise or column wise in the former order to get the cipher text.
 
 # PROGRAM
+```
+#include <stdio.h>
+#include <string.h>
 
+int main() {
+    char text[100], enc[100], dec[100];
+    int rails, len, i, j;
+
+    printf("Enter plaintext: ");
+    scanf("%s", text);
+
+    printf("Enter number of rails: ");
+    scanf("%d", &rails);
+
+    len = strlen(text);
+
+    /*ENCRYPTION*/
+
+    char rail[rails][len];
+    for(i = 0; i < rails; i++)
+        for(j = 0; j < len; j++)
+            rail[i][j] = '\n';
+
+    int row = 0, dir = 1;
+    for(i = 0; i < len; i++) {
+        rail[row][i] = text[i];
+
+        if(row == 0)
+            dir = 1;
+        else if(row == rails - 1)
+            dir = -1;
+
+        row += dir;
+    }
+
+    int k = 0;
+    for(i = 0; i < rails; i++) {
+        for(j = 0; j < len; j++) {
+            if(rail[i][j] != '\n')
+                enc[k++] = rail[i][j];
+        }
+    }
+    enc[k] = '\0';
+
+    printf("Encrypted: %s\n", enc);
+
+    /*DECRYPTION*/
+
+    // Step 1: Mark zigzag positions
+    for(i = 0; i < rails; i++)
+        for(j = 0; j < len; j++)
+            rail[i][j] = '\n';
+
+    row = 0; dir = 1;
+    for(i = 0; i < len; i++) {
+        rail[row][i] = '*';
+
+        if(row == 0)
+            dir = 1;
+        else if(row == rails - 1)
+            dir = -1;
+
+        row += dir;
+    }
+
+    // Step 2: Fill encrypted text row-wise
+    k = 0;
+    for(i = 0; i < rails; i++) {
+        for(j = 0; j < len; j++) {
+            if(rail[i][j] == '*' && k < len) {
+                rail[i][j] = enc[k++];
+            }
+        }
+    }
+
+    // Step 3: Read zigzag to get plaintext
+    row = 0; dir = 1;
+    k = 0;
+    for(i = 0; i < len; i++) {
+        dec[k++] = rail[row][i];
+
+        if(row == 0)
+            dir = 1;
+        else if(row == rails - 1)
+            dir = -1;
+
+        row += dir;
+    }
+    dec[k] = '\0';
+
+    printf("Decrypted: %s\n", dec);
+
+    return 0;
+}
+```
 # OUTPUT
+<img width="1057" height="654" alt="image" src="https://github.com/user-attachments/assets/73f05fb8-cafb-4ca6-8f41-9c0bd45df2b3" />
+
 
 # RESULT
+Thus the given program is verified and executed successfully
